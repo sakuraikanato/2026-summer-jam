@@ -4,6 +4,6 @@
 ```bash
 cd docker
 docker compose -p 26sjam up -d
-cd ../apps/apps/api
-bun run drizzle-kit push
+cd ../apps/api
+npm run drizzle-kit push
 ```
