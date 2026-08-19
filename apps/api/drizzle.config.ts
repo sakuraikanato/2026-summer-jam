@@ -2,7 +2,7 @@ import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
 	dialect: "mysql",
-	schema: "./src/db/schema",
+	schema: "./src/db/schema/index.ts",
 	out: "./src/db/drizzle",
 	dbCredentials: {
 		user: process.env.DB_USER || "root",
