@@ -1,0 +1,11 @@
+{
+  "name": "mhr-s-item-dict",
+  "private": true,
+  "packageManager": "bun@1.3.14",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "init": "cd docker compose -p 2026-summer-jam up -d"
+  }
+}
