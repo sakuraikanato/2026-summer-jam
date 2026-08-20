@@ -7,6 +7,8 @@ import { serveStatic } from 'hono/bun';
 
 const port = Number(process.env.API_PORT);
 
+console.log(process.env.FRONT_URL)
+
 const app = new Hono()
 
 .use("*", cors({

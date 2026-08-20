@@ -45,6 +45,19 @@ export const auth = betterAuth({
     advanced: {
       database: {
         generateId: "serial"
+      },
+      defaultCookieAttributes: {
+        secure: true,
+        sameSite: "none"
+      },
+      crossSubDomainCookies: {
+        enabled: false,
+        domain: undefined
       }
     }
 });
+
+export type AuthVariables = {
+  user: typeof auth.$Infer.Session.user | null
+  session: typeof auth.$Infer.Session.session | null
+}
