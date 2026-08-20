@@ -1,32 +1,26 @@
 import { Hono } from "hono"
-import { users } from "../db/schema"
-import { follows } from "../db/schema/follow"
+import { HTTPException } from "hono/http-exception"
 import { eq, and } from "drizzle-orm"
-import db from "../db"
+
 import { ApiResponse } from "@/lib/responseType"
 import { userAuth } from "@/middlwere/userAuth"
-import { HTTPException } from "hono/http-exception"
 import { getParam } from "@/lib/getParam"
+
+import db from "../db"
+import { entities } from "../db/schema/entities"
+import { follows } from "../db/schema/follow"
 
 export const follow = new Hono<{ Variables: typeof userAuth }>()
 
 .get("/:id/following", async (c) => {
   const id = getParam(c, "id")
-  const follow = await db.select({users}).from(follows).where(eq(follows.userFrom, id)).leftJoin(users, eq(follows.userTo, users.id));
+  const follow = await db.select({entities}).from(follows).where(eq(follows.fromUserId, id)).leftJoin(entities, eq(follows.toEntityId, entities.id));
   return c.json<ApiResponse<typeof follow>>({
     success: true,
     data: follow
   }, 200)
 })
 
-.get("/:id/followers", async (c) => {
-  const id = getParam(c, "id")
-  const follow = await db.select({users}).from(follows).where(eq(follows.userTo, id)).leftJoin(users, eq(follows.userFrom, users.id));
-  return c.json<ApiResponse<typeof follow>>({
-    success: true,
-    data: follow
-  }, 200)
-})
 .use(userAuth)
 
 .get("/:id", async (c) => {
@@ -35,7 +29,7 @@ export const follow = new Hono<{ Variables: typeof userAuth }>()
   if (!user) {
     throw new Error("User Not Found")
   }
-  const follow = await db.select().from(follows).where(and(eq(follows.userFrom, Number(user.id)), eq(follows.userTo, id)))
+  const follow = await db.select().from(follows).where(and(eq(follows.fromUserId, Number(user.id)), eq(follows.toEntityId, id)))
 
   const hasItem = follow.length > 0
   return c.json<ApiResponse<boolean>>({
@@ -52,7 +46,11 @@ export const follow = new Hono<{ Variables: typeof userAuth }>()
     throw new Error("User Not Found")
   }
 
-  await db.insert(follows).values({userFrom: Number(user.id), userTo: id})
+  try {
+    await db.insert(follows).values({fromUserId: Number(user.id), toEntityId: id})
+  } catch (e) {
+    throw new HTTPException(409, { message: "フォロー済みです" })
+  }
 
   return c.json<ApiResponse<null>>({
     success: true,
@@ -68,7 +66,11 @@ export const follow = new Hono<{ Variables: typeof userAuth }>()
     throw new Error("Unauthorized")
   }
 
-  await db.insert(follows).values({userFrom: Number(user.id), userTo: id})
+  try {
+    await db.delete(follows).where(and(eq(follows.fromUserId, Number(user.id)), eq(follows.toEntityId, id)));
+  } catch {
+    throw new HTTPException(400, { message: "フォロー解除に失敗しました" })
+  }
 
   return c.json<ApiResponse<null>>({
     success: true,
