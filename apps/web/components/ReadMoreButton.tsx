@@ -2,6 +2,6 @@ import Link from "next/link"
 
 export default function ReadMoreButton() {
     return (
-        <Link href="/">もっと知る</Link>
+        <Link href="/detail">もっと知る</Link>
     )
 }
