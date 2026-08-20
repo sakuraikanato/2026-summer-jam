@@ -9,8 +9,8 @@ export default function Header() {
             </div>
             <nav>
                 <ul className="flex gap-4">
-                    <li><Link href="/">新規登録/ログイン</Link></li>
-                    <li><Link href="/">応援希望の方はこちら＞</Link></li>
+                    <li><Link href="/auth/signup">新規登録</Link>/<Link href="/auth/signin">ログイン</Link></li>
+                    <li><Link href="/auth/signin">応援希望の方はこちら＞</Link></li>
                 </ul>
             </nav>
         </header>
