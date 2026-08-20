@@ -1,13 +1,11 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import db from "../src/db"; // your drizzle instance
-import { point } from "drizzle-orm/pg-core";
 import z from "zod"
 
 const userRoleSchema = z.enum([
   "user",
   "creater",
-  "admin"
 ])
 
 export const auth = betterAuth({
@@ -18,6 +16,7 @@ export const auth = betterAuth({
       enabled: true
     },
     user: {
+      modelName: "users",
       additionalFields: {
         description: {
           type: "string",
@@ -27,10 +26,11 @@ export const auth = betterAuth({
           type: "number",
           input: false,
           required: true,
+          defaultValue: 0
         },
         role: {
           type: "string",
-          input: false,
+          input: true,
           required: true,
           validator: {
             input: userRoleSchema,

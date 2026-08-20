@@ -8,6 +8,7 @@ import {
   int,
   index,
   uniqueIndex,
+  mysqlEnum
 } from "drizzle-orm/mysql-core";
 
 export const users = mysqlTable("users", {
@@ -22,8 +23,8 @@ export const users = mysqlTable("users", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
   description: text("description").notNull(),
-  point: int("point").notNull(),
-  role: text("role").notNull(),
+  point: int("point").default(0).notNull(),
+  role: mysqlEnum("role", ["user", "creater", "admin"]).notNull(),
 });
 
 export const session = mysqlTable(
@@ -92,20 +93,20 @@ export const verification = mysqlTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
-export const userRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
-  user: one(users, {
+  users: one(users, {
     fields: [session.userId],
     references: [users.id],
   }),
 }));
 
 export const accountRelations = relations(account, ({ one }) => ({
-  user: one(users, {
+  users: one(users, {
     fields: [account.userId],
     references: [users.id],
   }),
