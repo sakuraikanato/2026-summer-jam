@@ -10,7 +10,8 @@ const port = Number(process.env.API_PORT);
 const app = new Hono()
 
 .use("*", cors({
-  origin: process.env.FRONT_URL ?? "http://localhost:3000"
+  origin: process.env.FRONT_URL ?? "http://localhost:3000",
+  credentials: true
 }))
 .get('/', (c) => {
   return c.text('Hello Hono!')
