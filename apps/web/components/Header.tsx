@@ -3,7 +3,7 @@ import Link from "next/link"
 
 export default function Header() {
     return (
-        <header className="flex justify-around bg-orange-600">
+        <header className="w-full flex justify-around bg-[#FFF2E0]">
             <div>
                 <Image src="/logo.png" alt="Logo" width={100} height={20} />
             </div>
