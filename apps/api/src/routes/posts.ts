@@ -1,4 +1,5 @@
 import { Hono } from "hono"
+import { eq, like } from "drizzle-orm"
 import { posts } from "../db/schema"
 import { images } from "../db/schema"
 import { ApiResponse } from "../../lib/responseType"
@@ -11,6 +12,8 @@ const postsSchema = z.object({
   content: z.string(),
   userId: z.number(),
 })
+
+const parmSchema = z.string().optional();
 
 const saveFile = async (file: File): Promise<string | null> => {
   const arrayBuff = await file.arrayBuffer();
@@ -39,6 +42,37 @@ export const post = new Hono()
 
 .get("/", async (c) => {
   try {
+    const valiedParm = parmSchema.safeParse(c.req.query("search"));
+
+    if (valiedParm.success) {
+      const parm = valiedParm.data
+
+      const findPosts = parm 
+        ? await db.select().from(posts).leftJoin(images, eq(posts.imageId, images.id)).where(like(posts.content, `%${parm}%`))
+        : await db.select().from(posts).leftJoin(images, eq(posts.imageId, images.id))
+
+      return c.json<ApiResponse<typeof findPosts>>({
+        success: true,
+        data: findPosts
+      })
+    }
+    
+  } catch (e) {
+    throw e
+  }
+})
+
+.get("/:post_id", async (c) => {
+  try {
+    const parm = Number(c.req.param("post_id"));
+    
+    const post = await db.select().from(posts).where(eq(posts.id, parm));
+    return c.json<ApiResponse<typeof post>>({
+      success: true,
+      data: post
+    })
+  } catch (e) {
+    throw e
   }
 })
 
@@ -62,12 +96,12 @@ export const post = new Hono()
     // --------------
     // --- json ---
 
-    const valedPosts = typeof body.posts === "string" 
+    const valiedPosts = typeof body.posts === "string" 
       ? postsSchema.safeParse(JSON.parse(body.posts)) 
       : null
 
-    if (valedPosts && valedPosts.success) {
-      const { content, userId } = valedPosts.data;
+    if (valiedPosts && valiedPosts.success) {
+      const { content, userId } = valiedPosts.data;
 
       await db.insert(posts).values({content: content, userId: userId, imageId: imageId})
     }

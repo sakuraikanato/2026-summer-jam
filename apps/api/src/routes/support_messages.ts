@@ -28,10 +28,10 @@ export const supportMessage = new Hono()
 .post("/", async (c) => {
   try{
     const body = await c.req.json();
-    const valedBody = supportMessageSchema.safeParse(body);
+    const valiedBody = supportMessageSchema.safeParse(body);
 
-    if (valedBody.success) {
-      const { userId, content } = valedBody.data;
+    if (valiedBody.success) {
+      const { userId, content } = valiedBody.data;
       await db.insert(supportMessages).values({ userId: userId, content: content});
       return c.json<ApiResponse<null>>({
         success: true,
@@ -41,7 +41,7 @@ export const supportMessage = new Hono()
     return c.json<ApiResponse<null>>({
       success: false,
       error: {
-        message: `bad request: ${valedBody.error}`
+        message: `bad request: ${valiedBody.error}`
     }
   });
   } catch (e) {
