@@ -1,0 +1,7 @@
+POST http://localhost:8000/api/support_messages HTTP/1.1
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "content": "test"
+}
