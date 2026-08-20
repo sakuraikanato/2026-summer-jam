@@ -26,10 +26,6 @@ export const authClient = createAuthClient({
             output: userRoleSchema
           }
         },
-        point: {
-          type: "number",
-          defaultValue: 0
-        },
       }
     }),
   ]

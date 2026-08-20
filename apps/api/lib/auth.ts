@@ -25,12 +25,6 @@ export const auth = betterAuth({
           type: "string",
           input: true
         },
-        point: {
-          type: "number",
-          input: false,
-          required: true,
-          defaultValue: 0
-        },
         role: {
           type: "string",
           input: true,

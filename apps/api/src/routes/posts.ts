@@ -7,6 +7,7 @@ import z from "zod"
 import db from "../db"
 import path from "node:path"
 import { mkdir, writeFile, readFile } from "node:fs/promises"
+import { userAuth } from "@/middlwere/userAuth"
 
 const postsSchema = z.object({
   content: z.string(),
@@ -48,13 +49,13 @@ export const post = new Hono()
       const parm = valiedParm.data
 
       const findPosts = parm 
-        ? await db.select().from(posts).leftJoin(images, eq(posts.imageId, images.id)).where(like(posts.content, `%${parm}%`))
-        : await db.select().from(posts).leftJoin(images, eq(posts.imageId, images.id))
+        ? await db.select().from(posts).where(like(posts.content, `%${parm}%`))
+        : await db.select().from(posts)
 
       return c.json<ApiResponse<typeof findPosts>>({
         success: true,
         data: findPosts
-      })
+      }, 200)
     }
     
   } catch (e) {
@@ -75,6 +76,8 @@ export const post = new Hono()
     throw e
   }
 })
+
+.use(userAuth)
 
 .post("/", async (c) => {
   try {

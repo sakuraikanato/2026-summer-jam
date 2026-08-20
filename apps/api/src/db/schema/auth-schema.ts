@@ -23,7 +23,6 @@ export const users = mysqlTable("users", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
   description: text("description").notNull(),
-  point: int("point").default(0).notNull(),
   role: mysqlEnum("role", ["user", "creater", "admin"]).notNull(),
 });
 
