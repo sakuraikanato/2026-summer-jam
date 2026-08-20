@@ -4,8 +4,9 @@ import { follows } from "../db/schema/follow"
 import { eq } from "drizzle-orm"
 import db from "../db"
 import { ApiResponse } from "@/lib/responseType"
+import { userAuth } from "@/middlwere/userAuth"
 
-export const follow = new Hono()
+export const follow = new Hono<{ Variables: typeof userAuth }>()
 
 .get("/:id/following", async (c) => {
   try {
@@ -32,5 +33,23 @@ export const follow = new Hono()
     throw e
   }
 })
+.use(userAuth)
 
-.post("/")
+.post("/follows/:id", async (c) => {
+  try {
+    const user = c.get("user");
+    if (!user) {
+      throw new Error("Unauthorized")
+    }
+    const id = Number(c.req.param("id"));
+
+    await db.insert(follows).values({userFrom: Number(user.id), userTo: id})
+
+    return c.json<ApiResponse<null>>({
+      success: true,
+      data: null
+    })
+  } catch (e) {
+    throw e
+  }
+})
