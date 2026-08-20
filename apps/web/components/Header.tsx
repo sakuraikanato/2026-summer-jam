@@ -1,0 +1,18 @@
+import Image from "next/image"
+import Link from "next/link"
+
+export default function Header() {
+    return (
+        <header className="flex justify-around bg-orange-600">
+            <div>
+                <Image src="/logo.png" alt="Logo" width={100} height={20} />
+            </div>
+            <nav>
+                <ul className="flex gap-4">
+                    <li><Link href="/">新規登録/ログイン</Link></li>
+                    <li><Link href="/">応援希望の方はこちら＞</Link></li>
+                </ul>
+            </nav>
+        </header>
+    )
+}
