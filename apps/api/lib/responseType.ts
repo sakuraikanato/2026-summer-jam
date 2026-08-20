@@ -3,11 +3,9 @@ type ApiSuccess<T> = {
   data: T
 }
 
-type ApiError = {
+type ApiError<T> = {
   success: false,
-  error: {
-    message: string | unknown,
-  }
+  error: T
 }
 
-export type ApiResponse<T> = ApiSuccess<T> | ApiError
+export type ApiResponse<T> = ApiSuccess<T> | ApiError<T>

@@ -4,6 +4,7 @@ import { ApiResponse } from '../lib/responseType';
 import { appRoute } from './routes';
 import { auth } from '../lib/auth';
 import { serveStatic } from 'hono/bun';
+import { HTTPException } from 'hono/http-exception';
 
 const port = Number(process.env.API_PORT);
 
@@ -30,12 +31,22 @@ const app = new Hono()
     root: "./public",
   }),
 )
-.onError((err, c) => {
-  return c.json<ApiResponse<null>>({
+.notFound((c) => {
+  return c.json<ApiResponse<string>>({
     success: false,
-    error: {
-      message: err
-    }
+    error: "Not Found"
+  }, 404)
+})
+.onError((err, c) => {
+  if (err instanceof HTTPException) {
+    return c.json<ApiResponse<HTTPException>>({
+      success: false,
+      error: err
+    }, err.status)
+  }
+  return c.json<ApiResponse<typeof err>>({
+    success: false,
+    error: err
   }, 400)
 })
 

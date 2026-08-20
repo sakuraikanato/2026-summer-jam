@@ -32,7 +32,7 @@ export default function Signin() {
   }
 
   async function handleClick() {
-    await client.api.auth.follows[":id"].$post({param: {id: "4"}})
+    await client.api.follows[":id"].$post({param: {id: "4"}})
   }
 
   return (
