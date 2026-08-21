@@ -115,23 +115,21 @@ export async function getAllCats(): Promise<Cat[]> {
   return cats;
 }
 
-/** 応援中の猫。金額とフォロー状態を持つ */
-export type SupportingCat = Cat & {
+/** 応援している在校生。金額を持つ */
+export type SupportingUser = User & {
   /** これまでの応援額の合計（円） */
   totalAmount: number;
   /** 今月の応援額（円） */
   monthlyAmount: number;
-  isFollowing: boolean;
 };
 
-/** ユーザーが応援している猫（仮） */
-export async function getSupportingCats(userId: number): Promise<SupportingCat[]> {
-  return cats
-    .filter((c) => c.id !== userId % 2)
-    .map((c) => ({
-      ...c,
-      totalAmount: c.id * 3200,
-      monthlyAmount: c.id * 500,
-      isFollowing: c.id % 2 === 1,
+/** ログイン中のユーザーが応援している在校生（仮） */
+export async function getSupportingUsers(userId: number): Promise<SupportingUser[]> {
+  return users
+    .filter((u) => u.id !== userId)
+    .map((u) => ({
+      ...u,
+      totalAmount: u.id * 3200,
+      monthlyAmount: u.id * 500,
     }));
 }
