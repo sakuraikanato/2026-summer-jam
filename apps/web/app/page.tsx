@@ -1,70 +1,23 @@
-"use client";
-import {useState} from "react";
-import {useRouter} from "next/navigation";
-import {authClient} from "@/lib/auth";
-import { client } from "@/lib/client";
+import CatCardList from "@/components/CatCardList";
+import { getCatsByUser, getUser } from "@/lib/cats";
 
-export default function Signin() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isPending, setIsPending] = useState(false);
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError(null);
-    setIsPending(true);
-
-    console.log("email:", typeof email, "password:", typeof password);
-
-    const { error, data } = await authClient.signIn.email({email: email, password: password});
-    console.log(data)
-
-    if (error) {
-      setError(error.message ?? "ログインに失敗しました。");
-      setIsPending(false);
-      return;
-    }
-
-    router.push("/");
-    router.refresh();
-  }
-
-  async function handleClick() {
-    await client.api.follows[":id"].$post({param: {id: "4"}})
-  }
+export default async function Home() {
+  const user = await getUser(1);
+  const cats = await getCatsByUser(1);
 
   return (
     <>
-      <h1>ログイン</h1>
-      <form className="flex flex-col m-auto gap-4 min-w-1/3 max-w-2/3" onSubmit={handleSubmit}>
-        <input 
-          type="email" 
-          placeholder="メールアドレス" 
-          className="border" 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoComplete="email"
-        />
-        <input 
-          type="password" 
-          placeholder="パスワード" 
-          className="border" 
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          autoComplete="current-password"
-        />
+      {/* TODO: next/image に差し替え */}
+      <div className="w-full shrink-0 aspect-[4/3] bg-gray-300" />
+      <div className="flex flex-col gap-8 w-full max-w-sm mx-auto px-4 py-6">
 
-        {error && <p className="text-red-500">{error}</p>
-        }
-        <button type="submit" disabled={isPending}>
-          {isPending ? "ログイン中..." : "ログイン"}
-        </button>
-      </form>
-      <button onClick={handleClick}>aaaaaq</button>
+        {user && (
+          <section className="flex flex-col gap-3">
+            <h2 className="text-base font-semibold">応援できる子たち</h2>
+            <CatCardList user={user} cats={cats} />
+          </section>
+        )}
+      </div>
     </>
   );
 }

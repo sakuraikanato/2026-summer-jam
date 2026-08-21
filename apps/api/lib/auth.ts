@@ -10,7 +10,7 @@ const userRoleSchema = z.enum([
 
 export const auth = betterAuth({
     trustedOrigins: [
-      process.env.FRONT_URL!
+      process.env.FRONT_URL ?? "http://localhost:3000",
     ],
     database: drizzleAdapter(db, {
         provider: "mysql",
