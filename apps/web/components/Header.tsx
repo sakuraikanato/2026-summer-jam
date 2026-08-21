@@ -10,11 +10,12 @@ export default async function Header() {
             {/* 幅が足りないときはロゴ側を縮めて、リンクの折り返しを防ぐ */}
             <div className="min-w-0">
                 <Image
-                    src="/logo.png"
-                    alt="Logo"
-                    width={100}
-                    height={20}
-                    className="h-5 w-auto max-w-full object-contain object-left"
+                    src="/logo.svg"
+                    alt="PocketAle"
+                    width={520}
+                    height={150}
+                    priority
+                    className="h-6 md:h-12 w-auto max-w-full object-contain object-left"
                 />
             </div>
 

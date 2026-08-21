@@ -25,10 +25,10 @@ export default async function Profile() {
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold">投稿一覧</h2>
             <Link
-              href="/posts/new"
-              className="rounded-full bg-orange-600 px-4 py-1 text-sm font-bold"
+              href="/music/new"
+              className="rounded-full bg-[#E9876E] px-4 py-1 text-sm font-bold"
             >
-              投稿する
+              音楽を投稿
             </Link>
           </div>
           <PostList posts={posts} emptyMessage="まだ投稿がありません。" />
