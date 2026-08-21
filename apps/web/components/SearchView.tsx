@@ -2,17 +2,17 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import CatCard from "./CatCard";
-import type { Cat } from "@/lib/cats";
+import Link from "next/link";
+import type { User } from "@/lib/cats";
 
 type SearchViewProps = {
-    cats: Cat[];
+    users: User[];
 };
 
 // TODO: localStorage / API から取得する
-const histories = ["ミケ", "三毛猫", "子猫"];
+const histories = ["橘", "佐伯 りく", "白石"];
 
-export default function SearchView({ cats }: SearchViewProps) {
+export default function SearchView({ users }: SearchViewProps) {
     const [query, setQuery] = useState("");
     const [submitted, setSubmitted] = useState<string | null>(null);
     const [isFocused, setIsFocused] = useState(false);
@@ -23,10 +23,12 @@ export default function SearchView({ cats }: SearchViewProps) {
         setIsFocused(false);
     }
 
+    // 名前の部分一致で絞り込む。前後の空白は無視し、英字は大小を区別しない
+    const keyword = submitted?.trim().toLowerCase() ?? "";
     const results =
-        submitted === null
+        keyword === ""
             ? []
-            : cats.filter((cat) => cat.name.includes(submitted));
+            : users.filter((user) => user.name.toLowerCase().includes(keyword));
 
     return (
         <div className="flex flex-col gap-4">
@@ -45,7 +47,7 @@ export default function SearchView({ cats }: SearchViewProps) {
                         onChange={(e) => setQuery(e.target.value)}
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
-                        placeholder="猫の名前で検索"
+                        placeholder="ユーザー名で検索"
                         className="w-full bg-transparent text-sm outline-none"
                     />
                 </form>
@@ -84,12 +86,26 @@ export default function SearchView({ cats }: SearchViewProps) {
                     </h2>
 
                     {results.length === 0 ? (
-                        <p className="text-sm text-gray-600">該当する子が見つかりませんでした。</p>
+                        <p className="text-sm text-gray-600">該当するユーザーが見つかりませんでした。</p>
                     ) : (
-                        <ul className="grid grid-cols-3 gap-2">
-                            {results.map((cat) => (
-                                <li key={cat.id}>
-                                    <CatCard cat={cat} />
+                        <ul className="flex flex-col gap-2">
+                            {results.map((user) => (
+                                <li key={user.id}>
+                                    <Link
+                                        href={`/detail/${user.id}`}
+                                        className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white/70 p-3"
+                                    >
+                                        {/* TODO: imageUrl があれば next/image に差し替え */}
+                                        <div className="w-12 shrink-0 aspect-square rounded-full bg-gray-300" />
+                                        <div className="min-w-0">
+                                            <p className="truncate text-sm font-bold">{user.name}</p>
+                                            {user.description && (
+                                                <p className="truncate text-xs text-gray-600">
+                                                    {user.description}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </Link>
                                 </li>
                             ))}
                         </ul>

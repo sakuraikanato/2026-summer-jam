@@ -42,12 +42,36 @@ const users: User[] = [
     name: "橘 ひなた",
     imageUrl: null,
     description:
-      "音楽学校のボーカル専攻2年です。作詞作曲もひとりでやっています。放課後は学校のスタジオにこもって、バンドのメンバーと録り直しの毎日。卒業制作のアルバムを出すのが目標です。聴いてもらえるだけでうれしいです。",
+      "音楽学校のボーカル専攻2年。作詞作曲もひとりでやっています。卒業制作のアルバムを出すのが目標です。",
     totalSupport: 128000,
     followerCount: 342,
     instagramUrl: "https://instagram.com/",
     twitterUrl: "https://x.com/",
     isFollowing: false,
+  },
+  {
+    id: 2,
+    name: "佐伯 りく",
+    imageUrl: null,
+    description:
+      "作曲・DTM 専攻。打ち込みで作った曲を、ボーカル科の子に歌ってもらっています。",
+    totalSupport: 46000,
+    followerCount: 118,
+    instagramUrl: "https://instagram.com/",
+    twitterUrl: null,
+    isFollowing: false,
+  },
+  {
+    id: 3,
+    name: "白石 かなで",
+    imageUrl: null,
+    description:
+      "ピアノ専攻の1年。いまは弾き語りの曲を書いていて、学内のライブに向けて練習中です。",
+    totalSupport: 21500,
+    followerCount: 64,
+    instagramUrl: null,
+    twitterUrl: "https://x.com/",
+    isFollowing: true,
   },
 ];
 
@@ -65,6 +89,10 @@ const posts: Post[] = [
 
 export async function getUser(id: number): Promise<User | null> {
   return users.find((o) => o.id === id) ?? null;
+}
+
+export async function getAllUsers(): Promise<User[]> {
+  return users;
 }
 
 export async function getCat(id: number): Promise<Cat | null> {

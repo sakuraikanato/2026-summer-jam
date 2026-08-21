@@ -14,10 +14,10 @@ export default async function UserPage({ params }: PageProps<"/detail/[id]">) {
   const tracks = await getTracksByUser(user.id);
 
   return (
-    <div className="flex flex-1 flex-col gap-4 w-full max-w-sm mx-auto pt-6">
+    <div className="flex flex-1 flex-col gap-3 w-full max-w-sm mx-auto px-4 pt-2">
       <div className="flex items-center gap-3">
         {/* TODO: next/image に差し替え */}
-        <div className="w-16 shrink-0 aspect-square rounded-full bg-gray-300" />
+        <div className="w-14 shrink-0 aspect-square rounded-full bg-gray-300" />
         <h1 className="min-w-0 truncate text-lg font-bold">{user.name}</h1>
         <FollowButton initialFollowing={user.isFollowing} />
       </div>
@@ -48,9 +48,10 @@ export default async function UserPage({ params }: PageProps<"/detail/[id]">) {
 
       <hr className="-mx-4 border-black" />
 
-      {user.description && <p className="text-sm">{user.description}</p>}
+      {/* 紹介文が長くてもヘッダーを画面外へ押し出さないよう行数を制限する */}
+      {user.description && <p className="line-clamp-3 text-sm">{user.description}</p>}
 
-      <div className="-mx-4 flex flex-1 flex-col gap-3 bg-[#FFF2CF] px-4 py-3">
+      <div className="-mx-4 flex flex-1 flex-col gap-3 bg-[#FFF2CF] px-4 py-2">
         {tracks.length === 0 ? (
           <p className="text-sm text-gray-600">まだ曲が投稿されていません。</p>
         ) : (

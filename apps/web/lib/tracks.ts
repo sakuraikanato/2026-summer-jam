@@ -39,6 +39,30 @@ const tracks: Track[] = [
     userId: 1,
     audioUrl: "/audio/3.mp3",
   },
+  {
+    id: 4,
+    title: "ミッドナイトデモ",
+    artist: "佐伯 りく",
+    artworkUrl: null,
+    userId: 2,
+    audioUrl: "/audio/4.mp3",
+  },
+  {
+    id: 5,
+    title: "教室の窓",
+    artist: "佐伯 りく",
+    artworkUrl: null,
+    userId: 2,
+    audioUrl: "/audio/5.mp3",
+  },
+  {
+    id: 6,
+    title: "はじめての弾き語り",
+    artist: "白石 かなで",
+    artworkUrl: null,
+    userId: 3,
+    audioUrl: "/audio/6.mp3",
+  },
 ];
 
 export async function getTracks(): Promise<Track[]> {
