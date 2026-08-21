@@ -1,42 +1,21 @@
 import { Hono } from "hono"
 import { eq, like } from "drizzle-orm"
-import { posts } from "../db/schema"
-import { images } from "../db/schema"
+import { entities, posts, users, images } from "../db/schema"
 import { ApiResponse } from "../../lib/responseType"
 import z from "zod"
 import db from "../db"
-import path from "node:path"
-import { mkdir, writeFile, readFile } from "node:fs/promises"
+import { userAuth } from "@/middlwere/userAuth"
+import { HTTPException } from "hono/http-exception"
+import { saveFile } from "@/lib/saveFile"
 
 const postsSchema = z.object({
   content: z.string(),
-  userId: z.number(),
+  entityId: z.number(),
 })
 
 const parmSchema = z.string().optional();
 
-const saveFile = async (file: File): Promise<string | null> => {
-  const arrayBuff = await file.arrayBuffer();
 
-  const fileName = `${crypto.randomUUID()}.jpg`
-  console.log(process.cwd())
-  const uploadDir = path.join(path.resolve("./src"), "public", "uploads");
-  console.log(uploadDir)
-
-  await mkdir(uploadDir, {
-    recursive: true,
-  });
-  await writeFile(
-    path.join(uploadDir, fileName),
-    new Uint8Array(arrayBuff),
-  );
-
-  if (await readFile(`${uploadDir}/${fileName}`)) {
-    return `/uploads/${fileName}`;
-  } else {
-    return null;
-  }
-}
 
 export const post = new Hono()
 
@@ -48,13 +27,13 @@ export const post = new Hono()
       const parm = valiedParm.data
 
       const findPosts = parm 
-        ? await db.select().from(posts).leftJoin(images, eq(posts.imageId, images.id)).where(like(posts.content, `%${parm}%`))
-        : await db.select().from(posts).leftJoin(images, eq(posts.imageId, images.id))
+        ? await db.select().from(posts).where(like(posts.content, `%${parm}%`))
+        : await db.select().from(posts)
 
       return c.json<ApiResponse<typeof findPosts>>({
         success: true,
         data: findPosts
-      })
+      }, 200)
     }
     
   } catch (e) {
@@ -76,42 +55,51 @@ export const post = new Hono()
   }
 })
 
+.use(userAuth)
+
 .post("/", async (c) => {
-  try {
-    const body = await c.req.parseBody();
+  const body = await c.req.parseBody();
 
-    // --- 画像処理 --- 
-    const image = body.image instanceof File ? body.image : null;
-    const url = image ? await saveFile(image) : null;
-    console.log(url);
+  // --- 画像処理 --- 
+  const image = body.image instanceof File ? body.image : null;
+  const url = image ? await saveFile(image) : null;
+  console.log(url);
 
-    let imageId: number | null = null
+  let imageId: number | null = null
 
-    if (url) {
-      const imageIds = await db.insert(images).values({imageUrl: url, alt: "投稿画像"}).$returningId()
-      imageId = imageIds[0].id;
-    }
-    console.log(imageId)
-
-    // --------------
-    // --- json ---
-
-    const valiedPosts = typeof body.posts === "string" 
-      ? postsSchema.safeParse(JSON.parse(body.posts)) 
-      : null
-
-    if (valiedPosts && valiedPosts.success) {
-      const { content, userId } = valiedPosts.data;
-
-      await db.insert(posts).values({content: content, userId: userId, imageId: imageId})
-    }
-    //--------------
-    
-    return c.json<ApiResponse<null>>({
-      success: true,
-      data: null
-    })
-  } catch (e) {
-    throw e
+  if (url) {
+    const imageIds = await db.insert(images).values({imageUrl: url, alt: "投稿画像"}).$returningId()
+    imageId = imageIds[0].id;
   }
+  console.log(imageId)
+
+  // --------------
+  // --- json ---
+
+  const valiedPosts = typeof body.posts === "string" 
+    ? postsSchema.safeParse(JSON.parse(body.posts)) 
+    : null
+
+  if (valiedPosts && valiedPosts.success) {
+    const { content, entityId } = valiedPosts.data;
+    const user = c.get("user");
+    if (!user) throw new Error("User Not Found");
+
+    const userEntities = await db.select({id: entities.id}).from(entities).where(eq(entities.ownerId, Number(user.id)));
+    let entityList: Array<number> = []
+    userEntities.forEach((obj) => {
+      entityList.push(obj.id)
+    });
+    if (entityList.includes(entityId)) {
+      await db.insert(posts).values({content: content, entityId: entityId, imageId: imageId})
+    } else {
+      throw new HTTPException(400, { message: "不正な値です" });
+    }
+  }
+  //--------------
+  
+  return c.json<ApiResponse<null>>({
+    success: true,
+    data: null
+  })
 })
