@@ -39,14 +39,39 @@ export type Post = {
 const users: User[] = [
   {
     id: 1,
-    name: "猫ちゃん囲み隊",
+    name: "橘 ひなた",
     imageUrl: null,
-    description: "地域猫の保護活動をしています。保護した猫たちの日々の様子をお届けします。",
+    description:
+      "音楽学校のボーカル専攻2年。作詞作曲もひとりでやっています。卒業制作のアルバムを出すのが目標です。",
     totalSupport: 128000,
     followerCount: 342,
     instagramUrl: "https://instagram.com/",
     twitterUrl: "https://x.com/",
     isFollowing: false,
+  },
+  {
+    id: 2,
+    name: "佐伯 りく",
+    imageUrl: null,
+    description:
+      "作曲・DTM 専攻。打ち込みで作った曲を、ボーカル科の子に歌ってもらっています。",
+    totalSupport: 46000,
+    followerCount: 118,
+    instagramUrl: "https://instagram.com/",
+    twitterUrl: null,
+    isFollowing: false,
+  },
+  {
+    id: 3,
+    name: "白石 かなで",
+    imageUrl: null,
+    description:
+      "ピアノ専攻の1年。いまは弾き語りの曲を書いていて、学内のライブに向けて練習中です。",
+    totalSupport: 21500,
+    followerCount: 64,
+    instagramUrl: null,
+    twitterUrl: "https://x.com/",
+    isFollowing: true,
   },
 ];
 
@@ -64,6 +89,10 @@ const posts: Post[] = [
 
 export async function getUser(id: number): Promise<User | null> {
   return users.find((o) => o.id === id) ?? null;
+}
+
+export async function getAllUsers(): Promise<User[]> {
+  return users;
 }
 
 export async function getCat(id: number): Promise<Cat | null> {
@@ -86,23 +115,21 @@ export async function getAllCats(): Promise<Cat[]> {
   return cats;
 }
 
-/** 応援中の猫。金額とフォロー状態を持つ */
-export type SupportingCat = Cat & {
+/** 応援している在校生。金額を持つ */
+export type SupportingUser = User & {
   /** これまでの応援額の合計（円） */
   totalAmount: number;
   /** 今月の応援額（円） */
   monthlyAmount: number;
-  isFollowing: boolean;
 };
 
-/** ユーザーが応援している猫（仮） */
-export async function getSupportingCats(userId: number): Promise<SupportingCat[]> {
-  return cats
-    .filter((c) => c.id !== userId % 2)
-    .map((c) => ({
-      ...c,
-      totalAmount: c.id * 3200,
-      monthlyAmount: c.id * 500,
-      isFollowing: c.id % 2 === 1,
+/** ログイン中のユーザーが応援している在校生（仮） */
+export async function getSupportingUsers(userId: number): Promise<SupportingUser[]> {
+  return users
+    .filter((u) => u.id !== userId)
+    .map((u) => ({
+      ...u,
+      totalAmount: u.id * 3200,
+      monthlyAmount: u.id * 500,
     }));
 }

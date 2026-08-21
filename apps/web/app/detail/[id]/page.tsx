@@ -1,10 +1,8 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import CatCard from "@/components/CatCard";
 import FollowButton from "@/components/FollowButton";
-import UserTabs from "@/components/UserTabs";
-import PostList from "@/components/PostList";
-import { getCatsByUser, getUser, getPostsByUser } from "@/lib/cats";
+import MusicPlayerLauncher from "@/components/MusicPlayerLauncher";
+import { getUser } from "@/lib/cats";
+import { getTracksByUser } from "@/lib/tracks";
 
 const yen = (amount: number) => `¥${amount.toLocaleString("ja-JP")}`;
 
@@ -13,16 +11,13 @@ export default async function UserPage({ params }: PageProps<"/detail/[id]">) {
   const user = await getUser(Number(id));
   if (!user) notFound();
 
-  const [cats, posts] = await Promise.all([
-    getCatsByUser(user.id),
-    getPostsByUser(user.id),
-  ]);
+  const tracks = await getTracksByUser(user.id);
 
   return (
-    <div className="flex flex-1 flex-col gap-4 w-full max-w-sm mx-auto pt-6">
+    <div className="flex flex-1 flex-col gap-3 w-full max-w-sm mx-auto px-4 pt-2 md:max-w-3xl md:gap-5 md:px-6 md:pt-8">
       <div className="flex items-center gap-3">
         {/* TODO: next/image に差し替え */}
-        <div className="w-16 shrink-0 aspect-square rounded-full bg-gray-300" />
+        <div className="w-14 shrink-0 aspect-square rounded-full bg-gray-300 md:w-24" />
         <h1 className="min-w-0 truncate text-lg font-bold">{user.name}</h1>
         <FollowButton initialFollowing={user.isFollowing} />
       </div>
@@ -53,24 +48,16 @@ export default async function UserPage({ params }: PageProps<"/detail/[id]">) {
 
       <hr className="-mx-4 border-black" />
 
-      {user.description && <p className="text-sm">{user.description}</p>}
+      {/* 紹介文が長くてもヘッダーを画面外へ押し出さないよう行数を制限する */}
+      {user.description && <p className="line-clamp-3 text-sm">{user.description}</p>}
 
-      <UserTabs
-        cats={
-          cats.length === 0 ? (
-            <p className="text-sm text-gray-600">まだ登録されていません。</p>
-          ) : (
-            <ul className="grid grid-cols-2 gap-3">
-              {cats.map((cat) => (
-                <li key={cat.id}>
-                  <CatCard cat={cat} />
-                </li>
-              ))}
-            </ul>
-          )
-        }
-        posts={<PostList posts={posts} emptyMessage="まだ投稿がありません。" />}
-      />
+      <div className="-mx-4 flex flex-1 flex-col gap-3 bg-[#FFF2CF] px-4 py-2 md:-mx-6 md:px-6 md:py-6">
+        {tracks.length === 0 ? (
+          <p className="text-sm text-gray-600">まだ曲が投稿されていません。</p>
+        ) : (
+          <MusicPlayerLauncher tracks={tracks} />
+        )}
+      </div>
     </div>
   );
 }

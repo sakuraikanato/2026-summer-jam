@@ -1,0 +1,9 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>PocketAle app icon</title>
+  <rect width="512" height="512" rx="120" fill="#FF6F5B"/>
+  <rect x="130" y="150" width="252" height="166" rx="54" fill="#FFFFFF"/>
+  <path d="M170 306 L148 366 L226 316 Z" fill="#FFFFFF"/>
+  <path d="M256 296 C218 258, 200 230, 222 214 C240 200, 256 208, 256 222 C256 208, 272 200, 290 214 C312 230, 294 258, 256 296 Z" fill="#FF6F5B"/>
+  <path d="M400 110 L408 133 L431 141 L408 149 L400 172 L392 149 L369 141 L392 133 Z" fill="#FFC24D"/>
+  <path d="M150 356 L156 373 L173 379 L156 385 L150 402 L144 385 L127 379 L144 373 Z" fill="#FFC24D"/>
+</svg>
