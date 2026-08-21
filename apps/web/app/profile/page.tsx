@@ -10,8 +10,8 @@ export default async function Profile() {
   const user = await requireUser();
   const userId = Number(user.id);
 
-  // "creater" = 応援される側（団体）
-  const isCreater = user.role === "creater";
+  // "creator" = 応援される側（応募した在校生）
+  const isCreater = user.role === "creator";
 
   const supportingUsers = isCreater ? [] : await getSupportingUsers(userId);
   const posts = isCreater ? await getPostsByUser(userId) : [];

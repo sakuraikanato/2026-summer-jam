@@ -4,7 +4,7 @@ import z from "zod"
 
 const userRoleSchema = z.enum([
   "user",
-  "creater",
+  "creator",
 ])
 
 export const authClient = createAuthClient({

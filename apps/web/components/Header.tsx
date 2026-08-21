@@ -26,7 +26,7 @@ export default async function Header() {
                 <nav className="shrink-0">
                     <ul className="flex items-center gap-2 whitespace-nowrap text-xs">
                         <li><Link href="/auth/signup">新規登録</Link>/<Link href="/auth/signin">ログイン</Link></li>
-                        <li><Link href="/auth/signin">応援希望の方はこちら＞</Link></li>
+                        <li><Link href="/auth/creator/signup">応援希望の方はこちら＞</Link></li>
                     </ul>
                 </nav>
             )}
