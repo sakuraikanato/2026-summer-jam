@@ -9,6 +9,9 @@ const userRoleSchema = z.enum([
 
 export const authClient = createAuthClient({
   baseURL: "http://localhost:8000",
+  fetchOptions: {
+    credentials: "include",
+  },
   plugins: [
     inferAdditionalFields({
       user: {
@@ -22,10 +25,6 @@ export const authClient = createAuthClient({
             input: userRoleSchema,
             output: userRoleSchema
           }
-        },
-        point: {
-          type: "number",
-          defaultValue: 0
         },
       }
     }),

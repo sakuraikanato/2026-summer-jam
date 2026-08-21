@@ -5,7 +5,7 @@ import z from "zod"
 
 const userRoleSchema = z.enum([
   "user",
-  "creater",
+  "creator",
 ])
 
 export const auth = betterAuth({
@@ -25,12 +25,6 @@ export const auth = betterAuth({
           type: "string",
           input: true
         },
-        point: {
-          type: "number",
-          input: false,
-          required: true,
-          defaultValue: 0
-        },
         role: {
           type: "string",
           input: true,
@@ -45,6 +39,19 @@ export const auth = betterAuth({
     advanced: {
       database: {
         generateId: "serial"
+      },
+      defaultCookieAttributes: {
+        secure: true,
+        sameSite: "none"
+      },
+      crossSubDomainCookies: {
+        enabled: false,
+        domain: undefined
       }
     }
 });
+
+export type AuthVariables = {
+  user: typeof auth.$Infer.Session.user | null
+  session: typeof auth.$Infer.Session.session | null
+}

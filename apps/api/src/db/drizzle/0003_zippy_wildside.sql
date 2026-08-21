@@ -1,1 +1,0 @@
-ALTER TABLE `users` MODIFY COLUMN `point` int NOT NULL DEFAULT 0;
