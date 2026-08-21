@@ -2,13 +2,13 @@ import Link from "next/link";
 import type { Cat } from "@/lib/cats";
 
 type CatCardProps = {
-    cat: Pick<Cat, "id" | "orgId" | "name" | "imageUrl">;
+    cat: Pick<Cat, "id" | "userId" | "name" | "imageUrl">;
 };
 
 export default function CatCard({ cat }: CatCardProps) {
     return (
         <Link
-            href={`/detail/${cat.orgId}/cats/${cat.id}`}
+            href={`/detail/${cat.userId}/cats/${cat.id}`}
             className="flex flex-col items-center gap-2 w-full"
         >
             {/* TODO: imageUrl があれば next/image に差し替え */}

@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 
 type TabKey = "cats" | "posts";
 
-type OrgTabsProps = {
+type UserTabsProps = {
     cats: ReactNode;
     posts: ReactNode;
 };
@@ -15,7 +15,7 @@ const tabs = [
     { key: "posts", label: "投稿" },
 ] as const;
 
-export default function OrgTabs({ cats, posts }: OrgTabsProps) {
+export default function UserTabs({ cats, posts }: UserTabsProps) {
     const [active, setActive] = useState<TabKey>("cats");
 
     return (

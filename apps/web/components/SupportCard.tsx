@@ -30,7 +30,7 @@ export default function SupportCard({ cat }: SupportCardProps) {
                 <FollowButton initialFollowing={cat.isFollowing} />
 
                 <Link
-                    href={`/detail/${cat.orgId}/cats/${cat.id}`}
+                    href={`/detail/${cat.userId}/cats/${cat.id}`}
                     className="rounded-full border border-black px-3 py-1 text-xs"
                 >
                     詳細

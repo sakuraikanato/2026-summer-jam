@@ -4,7 +4,7 @@ import PostList from "@/components/PostList";
 import ProfileHeader from "@/components/ProfileHeader";
 import ProfileMenu from "@/components/ProfileMenu";
 import { requireUser } from "@/lib/dal";
-import { getPostsByOrg, getSupportingCats } from "@/lib/cats";
+import { getPostsByUser, getSupportingCats } from "@/lib/cats";
 
 export default async function Profile() {
   const user = await requireUser();
@@ -14,7 +14,7 @@ export default async function Profile() {
   const isCreater = user.role === "creater";
 
   const supportingCats = isCreater ? [] : await getSupportingCats(userId);
-  const posts = isCreater ? await getPostsByOrg(userId) : [];
+  const posts = isCreater ? await getPostsByUser(userId) : [];
 
   return (
     <div className="flex flex-1 flex-col gap-8 w-full max-w-sm mx-auto py-6">

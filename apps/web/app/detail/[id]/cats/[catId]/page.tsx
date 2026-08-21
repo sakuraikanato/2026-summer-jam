@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getCat, getOrg, getPostsByCat } from "@/lib/cats";
+import { getCat, getUser, getPostsByCat } from "@/lib/cats";
 
 export default async function CatPage({
   params,
@@ -9,20 +9,20 @@ export default async function CatPage({
   const cat = await getCat(Number(catId));
 
   // URL の団体と実際の所属が食い違う場合は 404 にする
-  if (!cat || cat.orgId !== Number(id)) notFound();
+  if (!cat || cat.userId !== Number(id)) notFound();
 
-  const [org, posts] = await Promise.all([
-    getOrg(cat.orgId),
+  const [user, posts] = await Promise.all([
+    getUser(cat.userId),
     getPostsByCat(cat.id),
   ]);
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-sm mx-auto px-4 py-6">
-      {org && (
+      {user && (
         <p className="text-sm">
           飼い主：
-          <Link href={`/detail/${org.id}`} className="underline">
-            {org.name}
+          <Link href={`/detail/${user.id}`} className="underline">
+            {user.name}
           </Link>
         </p>
       )}
