@@ -1,10 +1,8 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import CatCard from "@/components/CatCard";
 import FollowButton from "@/components/FollowButton";
-import UserTabs from "@/components/UserTabs";
-import PostList from "@/components/PostList";
-import { getCatsByUser, getUser, getPostsByUser } from "@/lib/cats";
+import MusicPlayerLauncher from "@/components/MusicPlayerLauncher";
+import { getUser } from "@/lib/cats";
+import { getTracksByUser } from "@/lib/tracks";
 
 const yen = (amount: number) => `¥${amount.toLocaleString("ja-JP")}`;
 
@@ -13,10 +11,7 @@ export default async function UserPage({ params }: PageProps<"/detail/[id]">) {
   const user = await getUser(Number(id));
   if (!user) notFound();
 
-  const [cats, posts] = await Promise.all([
-    getCatsByUser(user.id),
-    getPostsByUser(user.id),
-  ]);
+  const tracks = await getTracksByUser(user.id);
 
   return (
     <div className="flex flex-1 flex-col gap-4 w-full max-w-sm mx-auto pt-6">
@@ -55,22 +50,13 @@ export default async function UserPage({ params }: PageProps<"/detail/[id]">) {
 
       {user.description && <p className="text-sm">{user.description}</p>}
 
-      <UserTabs
-        cats={
-          cats.length === 0 ? (
-            <p className="text-sm text-gray-600">まだ登録されていません。</p>
-          ) : (
-            <ul className="grid grid-cols-2 gap-3">
-              {cats.map((cat) => (
-                <li key={cat.id}>
-                  <CatCard cat={cat} />
-                </li>
-              ))}
-            </ul>
-          )
-        }
-        posts={<PostList posts={posts} emptyMessage="まだ投稿がありません。" />}
-      />
+      <div className="-mx-4 flex flex-1 flex-col gap-3 bg-[#FFF2CF] px-4 py-3">
+        {tracks.length === 0 ? (
+          <p className="text-sm text-gray-600">まだ曲が投稿されていません。</p>
+        ) : (
+          <MusicPlayerLauncher tracks={tracks} />
+        )}
+      </div>
     </div>
   );
 }

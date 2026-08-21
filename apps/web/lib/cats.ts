@@ -39,9 +39,10 @@ export type Post = {
 const users: User[] = [
   {
     id: 1,
-    name: "猫ちゃん囲み隊",
+    name: "橘 ひなた",
     imageUrl: null,
-    description: "地域猫の保護活動をしています。保護した猫たちの日々の様子をお届けします。",
+    description:
+      "音楽学校のボーカル専攻2年です。作詞作曲もひとりでやっています。放課後は学校のスタジオにこもって、バンドのメンバーと録り直しの毎日。卒業制作のアルバムを出すのが目標です。聴いてもらえるだけでうれしいです。",
     totalSupport: 128000,
     followerCount: 342,
     instagramUrl: "https://instagram.com/",
