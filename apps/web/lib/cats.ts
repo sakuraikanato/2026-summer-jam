@@ -4,6 +4,12 @@ export type Org = {
   name: string;
   imageUrl: string | null;
   description: string | null;
+  /** 累計応援金額（円） */
+  totalSupport: number;
+  followerCount: number;
+  instagramUrl: string | null;
+  twitterUrl: string | null;
+  isFollowing: boolean;
 };
 
 /** 団体に所属する猫 */
@@ -31,7 +37,17 @@ export type Post = {
  */
 
 const orgs: Org[] = [
-  { id: 1, name: "猫ちゃん囲み隊", imageUrl: null, description: "地域猫の保護活動をしています。" },
+  {
+    id: 1,
+    name: "猫ちゃん囲み隊",
+    imageUrl: null,
+    description: "地域猫の保護活動をしています。保護した猫たちの日々の様子をお届けします。",
+    totalSupport: 128000,
+    followerCount: 342,
+    instagramUrl: "https://instagram.com/",
+    twitterUrl: "https://x.com/",
+    isFollowing: false,
+  },
 ];
 
 const cats: Cat[] = [
@@ -68,4 +84,25 @@ export async function getPostsByOrg(orgId: number): Promise<Post[]> {
 
 export async function getAllCats(): Promise<Cat[]> {
   return cats;
+}
+
+/** 応援中の猫。金額とフォロー状態を持つ */
+export type SupportingCat = Cat & {
+  /** これまでの応援額の合計（円） */
+  totalAmount: number;
+  /** 今月の応援額（円） */
+  monthlyAmount: number;
+  isFollowing: boolean;
+};
+
+/** ユーザーが応援している猫（仮） */
+export async function getSupportingCats(userId: number): Promise<SupportingCat[]> {
+  return cats
+    .filter((c) => c.id !== userId % 2)
+    .map((c) => ({
+      ...c,
+      totalAmount: c.id * 3200,
+      monthlyAmount: c.id * 500,
+      isFollowing: c.id % 2 === 1,
+    }));
 }

@@ -1,6 +1,12 @@
 import { notFound } from "next/navigation";
-import CatCardList from "@/components/CatCardList";
+import Link from "next/link";
+import CatCard from "@/components/CatCard";
+import FollowButton from "@/components/FollowButton";
+import OrgTabs from "@/components/OrgTabs";
+import PostList from "@/components/PostList";
 import { getCatsByOrg, getOrg, getPostsByOrg } from "@/lib/cats";
+
+const yen = (amount: number) => `¥${amount.toLocaleString("ja-JP")}`;
 
 export default async function OrgPage({ params }: PageProps<"/detail/[id]">) {
   const { id } = await params;
@@ -13,31 +19,58 @@ export default async function OrgPage({ params }: PageProps<"/detail/[id]">) {
   ]);
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-sm mx-auto px-4 py-6">
-      <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-1 flex-col gap-4 w-full max-w-sm mx-auto pt-6">
+      <div className="flex items-center gap-3">
         {/* TODO: next/image に差し替え */}
-        <div className="w-24 aspect-square rounded-full bg-gray-300" />
-        <h1 className="text-xl font-bold">{org.name}</h1>
-        {org.description && <p className="text-sm text-center">{org.description}</p>}
+        <div className="w-16 shrink-0 aspect-square rounded-full bg-gray-300" />
+        <h1 className="min-w-0 truncate text-lg font-bold">{org.name}</h1>
+        <FollowButton initialFollowing={org.isFollowing} />
       </div>
 
-      <CatCardList org={org} cats={cats} limit={cats.length} />
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
+        <p>
+          累計応援金額：<span className="font-bold">{yen(org.totalSupport)}</span>
+        </p>
+        <p>
+          フォロワー：<span className="font-bold">{org.followerCount}</span>
+        </p>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-base font-semibold">投稿</h2>
-        {posts.length === 0 ? (
-          <p className="text-sm text-gray-600">まだ投稿がありません。</p>
-        ) : (
-          <ul className="flex flex-col gap-3">
-            {posts.map((post) => (
-              <li key={post.id} className="rounded-xl border border-black/10 bg-white/70 p-3">
-                <p className="text-sm">{post.content}</p>
-                <p className="mt-1 text-xs text-gray-500">{post.createdAt}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+        <div className="flex items-center gap-2">
+          {org.instagramUrl && (
+            /* TODO: インスタのアイコンに差し替え */
+            <a href={org.instagramUrl} target="_blank" rel="noreferrer" aria-label="インスタグラム">
+              <span className="block w-6 aspect-square rounded-full bg-gray-300" />
+            </a>
+          )}
+          {org.twitterUrl && (
+            /* TODO: ツイッターのアイコンに差し替え */
+            <a href={org.twitterUrl} target="_blank" rel="noreferrer" aria-label="ツイッター">
+              <span className="block w-6 aspect-square rounded-full bg-gray-300" />
+            </a>
+          )}
+        </div>
+      </div>
+
+      <hr className="-mx-4 border-black" />
+
+      {org.description && <p className="text-sm">{org.description}</p>}
+
+      <OrgTabs
+        cats={
+          cats.length === 0 ? (
+            <p className="text-sm text-gray-600">まだ登録されていません。</p>
+          ) : (
+            <ul className="grid grid-cols-2 gap-3">
+              {cats.map((cat) => (
+                <li key={cat.id}>
+                  <CatCard cat={cat} />
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        posts={<PostList posts={posts} emptyMessage="まだ投稿がありません。" />}
+      />
     </div>
   );
 }

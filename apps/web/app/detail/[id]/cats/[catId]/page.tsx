@@ -18,15 +18,19 @@ export default async function CatPage({
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-sm mx-auto px-4 py-6">
+      {org && (
+        <p className="text-sm">
+          飼い主：
+          <Link href={`/detail/${org.id}`} className="underline">
+            {org.name}
+          </Link>
+        </p>
+      )}
+
       <div className="flex flex-col items-center gap-3">
         {/* TODO: next/image に差し替え */}
         <div className="w-32 aspect-square rounded-full bg-gray-300" />
         <h1 className="text-xl font-bold">{cat.name}</h1>
-        {org && (
-          <Link href={`/detail/${org.id}`} className="text-sm text-gray-600 underline">
-            {org.name}
-          </Link>
-        )}
         {cat.description && <p className="text-sm text-center">{cat.description}</p>}
       </div>
 
