@@ -4,8 +4,10 @@ import { post } from "./posts";
 import { follow } from "./follows";
 import { userAuth } from "@/middlwere/userAuth";
 import { auth } from "./auth";
+import { music } from "./music";
 
 export const appRoute = new Hono()
 .route("support_messages", supportMessage)
 .route("posts", post)
 .route("follows", follow)
+.route("music", music)
