@@ -3,7 +3,6 @@ import { getUser } from "@/lib/cats";
 import { getTracks } from "@/lib/tracks";
 
 export default async function Home() {
-  const user = await getUser(1);
   const tracks = await getTracks();
 
   return (
