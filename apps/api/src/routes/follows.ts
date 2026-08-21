@@ -5,16 +5,16 @@ import { eq, and } from "drizzle-orm"
 import { ApiResponse } from "@/lib/responseType"
 import { userAuth } from "@/middlwere/userAuth"
 import { getParam } from "@/lib/getParam"
+import { users } from "../db/schema"
 
 import db from "../db"
-import { entities } from "../db/schema/entities"
 import { follows } from "../db/schema/follow"
 
 export const follow = new Hono<{ Variables: typeof userAuth }>()
 
 .get("/:id/following", async (c) => {
   const id = getParam(c, "id")
-  const follow = await db.select({entities}).from(follows).where(eq(follows.fromUserId, id)).leftJoin(entities, eq(follows.toEntityId, entities.id));
+  const follow = await db.select({users}).from(follows).where(eq(follows.fromUserId, id)).leftJoin(users, eq(follows.toArtistId, users.id));
   return c.json<ApiResponse<typeof follow>>({
     success: true,
     data: follow
@@ -29,7 +29,7 @@ export const follow = new Hono<{ Variables: typeof userAuth }>()
   if (!user) {
     throw new Error("User Not Found")
   }
-  const follow = await db.select().from(follows).where(and(eq(follows.fromUserId, Number(user.id)), eq(follows.toEntityId, id)))
+  const follow = await db.select().from(follows).where(and(eq(follows.fromUserId, Number(user.id)), eq(follows.toArtistId, id)))
 
   const hasItem = follow.length > 0
   return c.json<ApiResponse<boolean>>({
@@ -47,7 +47,7 @@ export const follow = new Hono<{ Variables: typeof userAuth }>()
   }
 
   try {
-    await db.insert(follows).values({fromUserId: Number(user.id), toEntityId: id})
+    await db.insert(follows).values({fromUserId: Number(user.id), toArtistId: id})
   } catch (e) {
     throw new HTTPException(409, { message: "フォロー済みです" })
   }
@@ -67,7 +67,7 @@ export const follow = new Hono<{ Variables: typeof userAuth }>()
   }
 
   try {
-    await db.delete(follows).where(and(eq(follows.fromUserId, Number(user.id)), eq(follows.toEntityId, id)));
+    await db.delete(follows).where(and(eq(follows.fromUserId, Number(user.id)), eq(follows.toArtistId, id)));
   } catch {
     throw new HTTPException(400, { message: "フォロー解除に失敗しました" })
   }
