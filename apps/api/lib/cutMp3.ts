@@ -1,3 +1,5 @@
+/// <reference types="bun" />
+
 import ffmpegPath from "ffmpeg-static";
 
 export type CutMp3Options = {
