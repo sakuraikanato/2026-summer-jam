@@ -4,14 +4,9 @@ import { entities, posts, users, images } from "../db/schema"
 import { ApiResponse } from "../../lib/responseType"
 import z from "zod"
 import db from "../db"
-<<<<<<< Updated upstream
-import path from "node:path"
-import { mkdir, writeFile, readFile } from "node:fs/promises"
-=======
 import { userAuth } from "@/middlwere/userAuth"
 import { HTTPException } from "hono/http-exception"
 import { saveFile } from "@/lib/saveFile"
->>>>>>> Stashed changes
 
 const postsSchema = z.object({
   content: z.string(),
