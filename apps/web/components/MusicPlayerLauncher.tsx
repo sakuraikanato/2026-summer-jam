@@ -28,7 +28,7 @@ export default function MusicPlayerLauncher({
         <section className="flex flex-col gap-3">
             <h2 className="text-base font-semibold">うたを聴く</h2>
 
-            <ul className="grid grid-cols-3 gap-2">
+            <ul className="grid grid-cols-3 gap-2 md:grid-cols-6 md:gap-4">
                 {tracks.map((track, index) => (
                     <li key={track.id}>
                         <button

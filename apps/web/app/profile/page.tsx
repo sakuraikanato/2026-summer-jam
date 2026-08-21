@@ -17,7 +17,7 @@ export default async function Profile() {
   const posts = isCreater ? await getPostsByUser(userId) : [];
 
   return (
-    <div className="flex flex-1 flex-col gap-8 w-full max-w-sm mx-auto px-4 py-6">
+    <div className="flex flex-1 flex-col gap-8 w-full max-w-sm mx-auto px-4 py-6 md:max-w-3xl md:px-6 md:py-10">
       <ProfileHeader name={user.name}/>
 
       {isCreater ? (
@@ -41,7 +41,7 @@ export default async function Profile() {
           {supportingUsers.length === 0 ? (
             <p className="text-sm text-gray-600">まだ応援している人がいません。</p>
           ) : (
-            <ul className="-mx-4 flex flex-col gap-3">
+            <ul className="-mx-4 flex flex-col gap-3 md:mx-0 md:grid md:grid-cols-2">
               {supportingUsers.map((user) => (
                 <li key={user.id}>
                   <SupportCard user={user} />

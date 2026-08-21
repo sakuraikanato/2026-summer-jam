@@ -208,7 +208,7 @@ function Player({ tracks, initialIndex = 0, onClose }: PlayerProps) {
         >
             <div
                 onClick={(e) => e.stopPropagation()}
-                className="flex max-h-full w-full max-w-sm flex-col gap-3 overflow-y-auto rounded-2xl bg-[#F5EFDF] p-4 shadow-lg"
+                className="flex max-h-full w-full max-w-sm flex-col gap-3 overflow-y-auto rounded-2xl bg-[#F5EFDF] p-4 shadow-lg md:max-w-md md:p-6"
             >
                 <div className="flex items-center justify-between">
                     <p className="text-xs text-gray-600">

@@ -6,7 +6,8 @@ export default async function Header() {
     const user = await getUser()
 
     return (
-        <header className="w-full flex items-center justify-between gap-2 px-2 py-2 bg-[#FFF2E0]">
+        <header className="w-full bg-[#FFF2E0] px-2 py-2 md:px-6">
+            <div className="mx-auto flex w-full max-w-sm items-center justify-between gap-2 md:max-w-3xl">
             {/* 幅が足りないときはロゴ側を縮めて、リンクの折り返しを防ぐ */}
             <div className="min-w-0">
                 <Image
@@ -25,12 +26,13 @@ export default async function Header() {
                 </Link>
             ) : (
                 <nav className="shrink-0">
-                    <ul className="flex items-center gap-2 whitespace-nowrap text-xs">
+                    <ul className="flex items-center gap-2 whitespace-nowrap text-xs md:gap-4 md:text-sm">
                         <li><Link href="/auth/signup">新規登録</Link>/<Link href="/auth/signin">ログイン</Link></li>
                         <li><Link href="/auth/creator/signup">応援希望の方はこちら＞</Link></li>
                     </ul>
                 </nav>
             )}
+            </div>
         </header>
     )
 }

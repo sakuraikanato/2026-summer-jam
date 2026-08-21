@@ -12,7 +12,7 @@ export default function Footer() {
     return (
         <footer className="fixed bottom-0 left-0 right-0 z-50 border-t bg-orange-100">
             <nav>
-                <ul className="flex justify-around">
+                <ul className="mx-auto flex max-w-sm justify-around md:max-w-3xl">
                     {items.map((item) => (
                         <li key={item.href}>
                             <Link

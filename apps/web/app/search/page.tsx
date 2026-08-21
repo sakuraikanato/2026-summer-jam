@@ -5,7 +5,7 @@ export default async function Search() {
   const users = await getAllUsers();
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-sm mx-auto px-4 py-6">
+    <div className="flex flex-col gap-6 w-full max-w-sm mx-auto px-4 py-6 md:max-w-3xl md:px-6 md:py-10">
       <h1 className="text-xl font-bold">検索</h1>
       <SearchView users={users} />
     </div>

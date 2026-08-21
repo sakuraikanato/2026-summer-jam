@@ -88,7 +88,7 @@ export default function SearchView({ users }: SearchViewProps) {
                     {results.length === 0 ? (
                         <p className="text-sm text-gray-600">該当するユーザーが見つかりませんでした。</p>
                     ) : (
-                        <ul className="flex flex-col gap-2">
+                        <ul className="flex flex-col gap-2 md:grid md:grid-cols-2 md:gap-3">
                             {results.map((user) => (
                                 <li key={user.id}>
                                     <Link
