@@ -23,7 +23,7 @@ export const users = mysqlTable("users", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
   description: text("description").notNull(),
-  role: mysqlEnum("role", ["user", "creater", "admin"]).notNull(),
+  role: mysqlEnum("role", ["user", "creator", "admin"]).notNull(),
 });
 
 export const session = mysqlTable(
