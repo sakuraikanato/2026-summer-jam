@@ -1,5 +1,6 @@
 import { mysqlTable, int, varchar, text, timestamp, foreignKey } from "drizzle-orm/mysql-core";
-import { users, musicFiles } from "./index"
+import { users } from "./auth-schema";
+import { musicFiles } from "./musicFiles";
 
 export const musics = mysqlTable("musics", {
   id: int("id").primaryKey().autoincrement(),

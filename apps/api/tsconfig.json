@@ -1,11 +1,17 @@
 {
   "compilerOptions": {
     "strict": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "types": ["bun"],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "baseUrl": "."
   }
 }

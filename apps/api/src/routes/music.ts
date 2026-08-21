@@ -1,14 +1,14 @@
 import { Hono } from "hono";
-import { ApiResponse } from "@/lib/responseType";
-import { userAuth } from "@/middlwere/userAuth";
 import db from "../db";
 import { musics, musicFiles } from "../db/schema";
 import { eq, and } from "drizzle-orm";
-import { getParam } from "@/lib/getParam";
 import { members } from "../db/schema/members";
 import { HTTPException } from "hono/http-exception";
-import { cutMp3 } from "@/lib/cutMp3";
-import { getUploadPath, saveFile } from "@/lib/saveFile";
+import { ApiResponse } from "../../lib/responseType";
+import { userAuth } from "../../middlwere/userAuth";
+import { getParam } from "../../lib/getParam";
+import { cutMp3 } from "../../lib/cutMp3";
+import { getUploadPath, saveFile } from "../../lib/saveFile";
 
 const DEFAULT_AUDIO_TRIM_START_SECONDS = 0;
 const DEFAULT_AUDIO_TRIM_END_SECONDS = 30;
