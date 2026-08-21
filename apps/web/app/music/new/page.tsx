@@ -3,7 +3,7 @@ import MusicPostForm from "@/components/MusicPostForm";
 import { requireUser } from "@/lib/dal";
 
 export default async function NewMusic() {
-  const user = await requireUser();
+  const user = await requireUser("音楽投稿");
 
   // 投稿できるのは応援される側だけ
   if (user.role !== "creator") redirect("/profile");
