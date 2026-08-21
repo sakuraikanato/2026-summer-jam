@@ -3,26 +3,34 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { authClient } from "@/lib/auth";
+import { authButtonClass, authFieldClass, authFormClass } from "@/lib/authForm";
 
 export default function CreatorSignup() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [description, setDescription] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+
+    if (password !== passwordConfirm) {
+      setError("パスワードが一致しません。");
+      return;
+    }
+
     setIsPending(true);
 
     const { error } = await authClient.signUp.email({
       name,
       email,
       password,
-      description,
+      // users.description は NOT NULL なので空文字で埋める。紹介文はプロフィール編集で入力する
+      description: "",
       // 応募する在校生は応援される側なので creator 固定
       role: "creator",
     });
@@ -38,13 +46,17 @@ export default function CreatorSignup() {
   }
 
   return (
-    <>
-      <h1>応募希望の方の新規登録</h1>
-      <form className="flex flex-col m-auto gap-4 min-w-1/3 max-w-2/3" onSubmit={handleSubmit}>
+    <div className="flex flex-col gap-6 w-full max-w-sm mx-auto px-4 py-6 md:max-w-md md:py-10">
+      <h1 className="text-xl font-bold">応募希望の方の新規登録</h1>
+
+      <form
+        onSubmit={handleSubmit}
+        className={authFormClass}
+      >
         <input
           type="text"
           placeholder="お名前"
-          className="border"
+          className={authFieldClass}
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -53,7 +65,7 @@ export default function CreatorSignup() {
         <input
           type="email"
           placeholder="メールアドレス"
-          className="border"
+          className={authFieldClass}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -62,31 +74,36 @@ export default function CreatorSignup() {
         <input
           type="password"
           placeholder="パスワード"
-          className="border"
+          className={authFieldClass}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
           autoComplete="new-password"
         />
-        <textarea
-          placeholder="紹介文（専攻や活動について）"
-          className="border"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+        <input
+          type="password"
+          placeholder="パスワード（確認）"
+          className={authFieldClass}
+          value={passwordConfirm}
+          onChange={(e) => setPasswordConfirm(e.target.value)}
           required
-          rows={4}
+          autoComplete="new-password"
         />
 
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-sm text-red-500">{error}</p>}
 
-        <button type="submit" disabled={isPending}>
+        <button
+          type="submit"
+          disabled={isPending}
+          className={authButtonClass}
+        >
           {isPending ? "登録中..." : "登録する"}
         </button>
 
-        <Link href="/auth/signin" className="text-sm underline">
+        <Link href="/auth/signin" className="text-center text-xs underline">
           すでにアカウントをお持ちの方はログイン＞
         </Link>
       </form>
-    </>
+    </div>
   );
 }

@@ -27,9 +27,14 @@ export const getUser = cache(async () => {
   return session?.user ?? null;
 });
 
-/** ログイン必須のページ・Server Action で使う。未ログインならサインインへ飛ばす */
-export const requireUser = cache(async () => {
+/**
+ * ログイン必須のページ・Server Action で使う。未ログインならサインインへ飛ばす。
+ * feature を渡すと、サインイン画面に「◯◯機能を利用するには…」の案内を出せる。
+ */
+export const requireUser = cache(async (feature?: string) => {
   const user = await getUser();
-  if (!user) redirect("/auth/signin");
+  if (!user) {
+    redirect(feature ? `/auth/signin?required=${encodeURIComponent(feature)}` : "/auth/signin");
+  }
   return user;
 });

@@ -7,7 +7,7 @@ import { requireUser } from "@/lib/dal";
 import { getPostsByUser, getSupportingUsers } from "@/lib/cats";
 
 export default async function Profile() {
-  const user = await requireUser();
+  const user = await requireUser("マイページ");
   const userId = Number(user.id);
 
   // "creator" = 応援される側（応募した在校生）

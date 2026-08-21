@@ -1,0 +1,75 @@
+<svg width="1440" height="640" viewBox="0 0 1440 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>PocketAle Hero</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1440" y2="640" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF8F2"/>
+      <stop offset="1" stop-color="#FFEFE6"/>
+    </linearGradient>
+    <linearGradient id="noteGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF8A78"/>
+      <stop offset="1" stop-color="#FF6F5B"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.4" r="0.6">
+      <stop offset="0" stop-color="#FFC24D" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#FFC24D" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="1440" height="640" fill="url(#bg)"/>
+
+  <!-- ambient glow behind illustration -->
+  <circle cx="1040" cy="300" r="360" fill="url(#glow)"/>
+
+  <!-- ================= right illustration: pocket + street musician + music note ================= -->
+  <g>
+    <!-- pocket flap (jean-pocket silhouette) -->
+    <path d="M780 640 L780 430 C780 350 850 300 960 300 C1070 300 1140 350 1140 430 L1140 640 Z" fill="#FFDCCF"/>
+    <!-- pocket stitch line -->
+    <path d="M800 640 L800 440 C800 372 862 328 960 328 C1058 328 1120 372 1120 440 L1120 640"
+          stroke="#FF6F5B" stroke-width="4" stroke-dasharray="10 10" fill="none" opacity="0.55"/>
+
+    <!-- street musician silhouette, sitting, playing guitar -->
+    <g opacity="0.14" fill="#2B2A33">
+      <circle cx="670" cy="330" r="20"/>
+      <path d="M646 372 C646 350 656 340 670 340 C684 340 694 350 694 372 L694 420 C694 434 646 434 646 420 Z"/>
+      <!-- guitar body -->
+      <path d="M700 420 C700 400 686 392 674 400 C664 406 664 420 674 428 C664 434 664 448 676 452 C688 456 704 448 704 432 Z"/>
+      <!-- guitar neck -->
+      <path d="M700 400 L738 358" stroke="#2B2A33" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <!-- open case at feet -->
+      <path d="M634 434 L706 434 L698 456 L642 456 Z"/>
+    </g>
+
+    <!-- music note quietly rising from the pocket -->
+    <g>
+      <ellipse cx="992" cy="322" rx="16" ry="12" fill="url(#noteGrad)" transform="rotate(-18 992 322)"/>
+      <rect x="1004" y="216" width="8" height="112" rx="4" fill="url(#noteGrad)"/>
+      <path d="M1012 216 C1040 224 1052 240 1050 262 C1046 250 1032 240 1012 236 Z" fill="url(#noteGrad)"/>
+    </g>
+    <!-- second, smaller note trailing behind -->
+    <g opacity="0.85">
+      <ellipse cx="1072" cy="286" rx="10" ry="8" fill="url(#noteGrad)" transform="rotate(-18 1072 286)"/>
+      <rect x="1080" y="230" width="6" height="60" rx="3" fill="url(#noteGrad)"/>
+    </g>
+
+    <!-- quiet sparkles around the notes (echoing logo sparkle motif, softer) -->
+    <path d="M940 250 L942.6 258 L950.6 260.6 L942.6 263.2 L940 271.2 L937.4 263.2 L929.4 260.6 L937.4 258 Z" fill="#FFC24D"/>
+    <path d="M1110 220 L1112 226 L1118 228 L1112 230 L1110 236 L1108 230 L1102 228 L1108 226 Z" fill="#FFC24D" opacity="0.85"/>
+    <circle cx="920" cy="300" r="5" fill="#FF6F5B" opacity="0.6"/>
+  </g>
+
+  <!-- ================= left copy block ================= -->
+  <g font-family="'Poppins','Nunito','Hiragino Maru Gothic ProN',sans-serif">
+    <text x="120" y="270" font-size="56" font-weight="700" fill="#2B2A33">
+      <tspan x="120" dy="0">ふらっと出会って、</tspan>
+      <tspan x="120" dy="72"><tspan fill="#FF6F5B">そっと応援。</tspan></tspan>
+    </text>
+    <text x="122" y="392" font-size="20" fill="#9A8B82">
+      路上で出会った音に、その場で気持ちを届けよう。
+    </text>
+
+    <!-- small underline accent -->
+    <rect x="122" y="416" width="64" height="6" rx="3" fill="#FFC24D"/>
+  </g>
+</svg>
