@@ -1,25 +1,48 @@
-import path from "node:path"
-import { mkdir, writeFile, readFile } from "node:fs/promises"
+import { basename, extname, join, resolve } from "node:path";
+import { mkdir, writeFile } from "node:fs/promises";
 
-export const saveFile = async (file: File): Promise<string | null> => {
+const uploadDir = resolve("./public/uploads");
+
+const extensionsByMimeType: Record<string, string> = {
+  "image/gif": ".gif",
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+  "image/webp": ".webp",
+  "audio/mpeg": ".mp3",
+  "audio/mp3": ".mp3",
+  "audio/wav": ".wav",
+  "audio/x-wav": ".wav",
+  "audio/ogg": ".ogg",
+  "audio/webm": ".webm",
+  "audio/mp4": ".m4a",
+};
+
+const getExtension = (file: File): string => {
+  const extension = extname(file.name).toLowerCase();
+
+  if (/^\.[a-z0-9]{1,10}$/.test(extension)) {
+    return extension;
+  }
+
+  return extensionsByMimeType[file.type] ?? ".bin";
+};
+
+export const getUploadPath = (url: string): string => {
+  return join(uploadDir, basename(url));
+};
+
+export const saveFile = async (file: File): Promise<string> => {
   const arrayBuff = await file.arrayBuffer();
 
-  const fileName = `${crypto.randomUUID()}.jpg`
-  console.log(process.cwd())
-  const uploadDir = path.join(path.resolve("./src"), "public", "uploads");
-  console.log(uploadDir)
+  const fileName = `${crypto.randomUUID()}${getExtension(file)}`;
 
   await mkdir(uploadDir, {
     recursive: true,
   });
   await writeFile(
-    path.join(uploadDir, fileName),
+    join(uploadDir, fileName),
     new Uint8Array(arrayBuff),
   );
 
-  if (await readFile(`${uploadDir}/${fileName}`)) {
-    return `/uploads/${fileName}`;
-  } else {
-    return null;
-  }
-}
+  return `/uploads/${fileName}`;
+};

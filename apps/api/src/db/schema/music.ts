@@ -4,7 +4,7 @@ import { users, musicFiles } from "./index"
 export const musics = mysqlTable("musics", {
   id: int("id").primaryKey().autoincrement(),
   title: varchar("title", { length: 255}).notNull(),
-  imageUrl: varchar("image_url", { length: 255 }).notNull(),
+  iconUrl: varchar("icon_url", { length: 255 }).notNull(),
   artistId: int("artist_id").notNull().references(() => users.id),
   otherArtistId: int("other_artist_id").references(() => users.id),
   fileId: int("file_id").notNull(),

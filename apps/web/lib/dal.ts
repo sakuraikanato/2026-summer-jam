@@ -2,6 +2,7 @@ import { cache } from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { authClient } from "@/lib/auth";
+import { auth } from "api/lib/auth";
 
 /**
  * Data Access Layer
@@ -12,18 +13,18 @@ import { authClient } from "@/lib/auth";
  */
 
 /** セッションを取得する。未ログインなら null */
-export const getSession = cache(async () => {
-  const { data } = await authClient.getSession({
-    // Server Component からはブラウザの Cookie が自動で乗らないので明示的に転送する
-    fetchOptions: { headers: await headers() },
-  });
-
-  return data ?? null;
-});
 
 /** ログイン中のユーザーを取得する。未ログインなら null */
 export const getUser = cache(async () => {
-  const session = await getSession();
+  let session
+  if (typeof window === "undefined") {
+    session = await auth.api.getSession({
+      headers: await headers()
+    })
+  } else {
+    session = await authClient.useSession().data;
+  }
+  
   return session?.user ?? null;
 });
 

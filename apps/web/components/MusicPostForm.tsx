@@ -13,6 +13,8 @@ export default function MusicPostForm() {
     const [title, setTitle] = useState("");
     const [audio, setAudio] = useState<File | null>(null);
     const [thumbnail, setThumbnail] = useState<File | null>(null);
+    const [startTime, setStartTime] = useState("0");
+    const [endTime, setEndTime] = useState("30");
     const [error, setError] = useState<string | null>(null);
     const [isPending, setIsPending] = useState(false);
 
@@ -30,10 +32,12 @@ export default function MusicPostForm() {
         const form = new FormData();
         form.append("title", title);
         form.append("audio", audio);
-        form.append("thumbnail", thumbnail);
+        form.append("image", thumbnail);
+        form.append("startTime", startTime);
+        form.append("endTime", endTime);
 
         try {
-            const res = await fetch(`${API_URL}/api/musics`, {
+            const res = await fetch(`${API_URL}/api/music`, {
                 method: "POST",
                 body: form,
                 // セッションの Cookie を送る
@@ -70,6 +74,32 @@ export default function MusicPostForm() {
                     className={fieldClass}
                 />
             </label>
+
+            <div className="grid grid-cols-2 gap-3">
+                <label className="flex flex-col gap-1">
+                    <span className="text-sm font-bold">開始秒</span>
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={startTime}
+                        onChange={(e) => setStartTime(e.target.value)}
+                        className={fieldClass}
+                    />
+                </label>
+
+                <label className="flex flex-col gap-1">
+                    <span className="text-sm font-bold">終了秒</span>
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={endTime}
+                        onChange={(e) => setEndTime(e.target.value)}
+                        className={fieldClass}
+                    />
+                </label>
+            </div>
 
             <label className="flex flex-col gap-1">
                 <span className="text-sm font-bold">音声ファイル</span>
