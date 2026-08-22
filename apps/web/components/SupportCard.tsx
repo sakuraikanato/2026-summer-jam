@@ -8,6 +8,19 @@ type SupportCardProps = {
 
 const yen = (amount: number) => `¥${amount.toLocaleString("ja-JP")}`;
 
+/**
+ * 月の応援額からメンバー区分を決める。
+ * TODO: 区分と金額はいまのところ仮。正式な基準が決まったらここを直す。
+ */
+const memberRanks = [
+    { min: 1500, label: "ゴールドメンバー" },
+    { min: 1000, label: "シルバーメンバー" },
+    { min: 0, label: "ブロンズメンバー" },
+] as const;
+
+const rankOf = (monthlyAmount: number) =>
+    memberRanks.find((rank) => monthlyAmount >= rank.min)?.label ?? "ブロンズメンバー";
+
 export default function SupportCard({ user }: SupportCardProps) {
     return (
         <article className="flex flex-col gap-3 rounded-2xl border border-black/10 bg-white/70 p-3">
@@ -28,8 +41,8 @@ export default function SupportCard({ user }: SupportCardProps) {
             </div>
 
             <div className="flex flex-wrap justify-between items-center gap-1 pt-3">
-                <p className="bg-[#FFCFA5] p-2 text-xs">
-                    今月の応援額：<span className="font-bold">{yen(user.monthlyAmount)}</span>
+                <p className="bg-[#FFCFA5] p-2 text-xs font-bold">
+                    {rankOf(user.monthlyAmount)}
                 </p>
 
                 <FollowButton initialFollowing={user.isFollowing} />
@@ -41,12 +54,13 @@ export default function SupportCard({ user }: SupportCardProps) {
                     詳細
                 </Link>
 
-                <Link
-                    href="/charge"
+                {/* TODO: 解約処理につなぐ。いまは表示のみ */}
+                <button
+                    type="button"
                     className="rounded-full bg-[#E9876E] px-3 py-1 text-xs font-bold"
                 >
-                    応援追加
-                </Link>
+                    解約
+                </button>
             </div>
         </article>
     );

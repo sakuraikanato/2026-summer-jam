@@ -1,10 +1,24 @@
 import { notFound } from "next/navigation";
 import FollowButton from "@/components/FollowButton";
+import FanPlanBox from "@/components/FanPlanBox";
+import SubscribeButton from "@/components/SubscribeButton";
 import MusicPlayerLauncher from "@/components/MusicPlayerLauncher";
 import { getUser } from "@/lib/cats";
 import { getTracksByUser } from "@/lib/tracks";
 
-const yen = (amount: number) => `¥${amount.toLocaleString("ja-JP")}`;
+/** 日付だけを見て「2日前」のような相対表示にする。時刻は無視してカレンダー上の差で数える */
+const relativeDate = (isoDate: string) => {
+  const startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  const days = Math.round(
+    (startOfDay(new Date()) - startOfDay(new Date(`${isoDate}T00:00:00`))) / 86_400_000,
+  );
+
+  if (days <= 0) return "今日";
+  if (days === 1) return "昨日";
+  if (days < 30) return `${days}日前`;
+  if (days < 365) return `${Math.floor(days / 30)}ヶ月前`;
+  return `${Math.floor(days / 365)}年前`;
+};
 
 export default async function UserPage({ params }: PageProps<"/detail/[id]">) {
   const { id } = await params;
@@ -20,12 +34,10 @@ export default async function UserPage({ params }: PageProps<"/detail/[id]">) {
         <div className="w-14 shrink-0 aspect-square rounded-full bg-gray-300 md:w-24" />
         <h1 className="min-w-0 truncate text-lg font-bold">{user.name}</h1>
         <FollowButton initialFollowing={user.isFollowing} />
+        <p className="shrink-0 text-xs text-gray-600">最終更新：{relativeDate(user.updatedAt)}</p>
       </div>
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
-        <p>
-          累計応援金額：<span className="font-bold">{yen(user.totalSupport)}</span>
-        </p>
         <p>
           フォロワー：<span className="font-bold">{user.followerCount}</span>
         </p>
@@ -44,6 +56,10 @@ export default async function UserPage({ params }: PageProps<"/detail/[id]">) {
             </a>
           )}
         </div>
+
+        <p className="ml-auto">
+          活動歴：<span className="font-bold">{user.activityYears}年</span>
+        </p>
       </div>
 
       <hr className="-mx-4 border-black" />
@@ -51,7 +67,11 @@ export default async function UserPage({ params }: PageProps<"/detail/[id]">) {
       {/* 紹介文が長くてもヘッダーを画面外へ押し出さないよう行数を制限する */}
       {user.description && <p className="line-clamp-3 text-sm">{user.description}</p>}
 
-      <div className="-mx-4 flex flex-1 flex-col gap-3 bg-[#FFF2CF] px-4 py-2 md:-mx-6 md:px-6 md:py-6">
+      <FanPlanBox name={user.name} />
+
+      <SubscribeButton name={user.name} />
+
+      <div className="-mx-4 flex flex-1 flex-col gap-3 px-4 py-2 md:-mx-6 md:px-6 md:py-6">
         {tracks.length === 0 ? (
           <p className="text-sm text-gray-600">まだ曲が投稿されていません。</p>
         ) : (

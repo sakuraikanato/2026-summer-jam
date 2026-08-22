@@ -7,6 +7,10 @@ export type User = {
   /** 累計応援金額（円） */
   totalSupport: number;
   followerCount: number;
+  /** 活動歴（年） */
+  activityYears: number;
+  /** 最終更新日 */
+  updatedAt: string;
   instagramUrl: string | null;
   twitterUrl: string | null;
   isFollowing: boolean;
@@ -45,6 +49,8 @@ const users: User[] = [
       "音楽学校のボーカル専攻2年。作詞作曲もひとりでやっています。卒業制作のアルバムを出すのが目標です。",
     totalSupport: 128000,
     followerCount: 342,
+    activityYears: 2,
+    updatedAt: "2026-08-20",
     instagramUrl: "https://instagram.com/",
     twitterUrl: "https://x.com/",
     isFollowing: false,
@@ -57,6 +63,8 @@ const users: User[] = [
       "作曲・DTM 専攻。打ち込みで作った曲を、ボーカル科の子に歌ってもらっています。",
     totalSupport: 46000,
     followerCount: 118,
+    activityYears: 1,
+    updatedAt: "2026-08-18",
     instagramUrl: "https://instagram.com/",
     twitterUrl: null,
     isFollowing: false,
@@ -69,6 +77,8 @@ const users: User[] = [
       "ピアノ専攻の1年。いまは弾き語りの曲を書いていて、学内のライブに向けて練習中です。",
     totalSupport: 21500,
     followerCount: 64,
+    activityYears: 3,
+    updatedAt: "2026-08-21",
     instagramUrl: null,
     twitterUrl: "https://x.com/",
     isFollowing: true,
