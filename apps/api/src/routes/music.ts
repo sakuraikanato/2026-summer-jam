@@ -1,8 +1,9 @@
 import { Hono } from "hono";
 import db from "../db";
 import { musics, musicFiles } from "../db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, asc } from "drizzle-orm";
 import { members } from "../db/schema/members";
+import { users } from "../db/schema/auth-schema";
 import { HTTPException } from "hono/http-exception";
 import { ApiResponse } from "../../lib/responseType";
 import { userAuth } from "../../middlwere/userAuth";
@@ -35,7 +36,19 @@ const parseTrimTime = (
 export const music = new Hono()
 
 .get("/", async (c) => {
-  const music = await db.select().from(musics);
+  const music = await db
+    .select({
+      id: musics.id,
+      title: musics.title,
+      artist: users.name,
+      artworkUrl: musics.iconUrl,
+      userId: musics.artistId,
+      audioUrl: musicFiles.shortUrl,
+    })
+    .from(musics)
+    .innerJoin(users, eq(musics.artistId, users.id))
+    .innerJoin(musicFiles, eq(musics.fileId, musicFiles.id))
+    .orderBy(asc(musics.createdAt), asc(musics.id));
 
   return c.json<ApiResponse<typeof music>>({
     success: true,

@@ -1,3 +1,5 @@
 export * from "./auth-schema"
+export * from "./follow"
+export * from "./members"
 export * from "./music"
 export * from "./musicFiles"

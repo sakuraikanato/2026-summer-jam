@@ -1,4 +1,4 @@
-import { AuthVariables } from "../..//lib/auth";
+import type { AuthVariables } from "../..//lib/auth";
 import { ApiResponse } from "../..//lib/responseType";
 import { userAuth } from "../..//middlwere/userAuth";
 import { Hono } from "hono";

@@ -23,6 +23,7 @@ export default function MusicPlayerLauncher({
     const [openIndex, setOpenIndex] = useState<number | null>(defaultOpen ? 0 : null);
 
     if (tracks.length === 0) return null;
+    console.log(tracks)
 
     return (
         <section className="flex flex-col gap-3">

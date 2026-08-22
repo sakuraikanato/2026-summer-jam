@@ -3,6 +3,7 @@ import { cors } from 'hono/cors'
 import { ApiResponse } from '../lib/responseType';
 import { appRoute } from './routes';
 import { auth } from '../lib/auth';
+import type { AuthVariables } from '../lib/auth';
 import { serveStatic } from 'hono/bun';
 import { HTTPException } from 'hono/http-exception';
 
@@ -10,7 +11,7 @@ const port = Number(process.env.API_PORT);
 
 console.log(process.env.FRONT_URL)
 
-const app = new Hono()
+const app = new Hono<{ Variables: AuthVariables }>()
 
 .use("*", cors({
   origin: process.env.FRONT_URL ?? "http://localhost:3000",

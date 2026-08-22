@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { authClient } from "@/lib/auth";
 import { auth } from "api/lib/auth";
+import { client } from "./client";
 
 /**
  * Data Access Layer
@@ -16,16 +17,19 @@ import { auth } from "api/lib/auth";
 
 /** ログイン中のユーザーを取得する。未ログインなら null */
 export const getUser = cache(async () => {
-  let session
-  if (typeof window === "undefined") {
-    session = await auth.api.getSession({
-      headers: await headers()
-    })
-  } else {
-    session = await authClient.useSession().data;
-  }
-  
-  return session?.user ?? null;
+  const requestHeaders = await headers();
+  const cookie = requestHeaders.get("cookie")
+  console.log(cookie)
+
+  const res = await client.api.me.$get(
+    undefined,
+    {
+      headers: { Cookie: cookie ?? "" }
+  })
+  const session = await res.json()
+  if (!session.success) return null;
+
+  return session.data ?? null;
 });
 
 /**
