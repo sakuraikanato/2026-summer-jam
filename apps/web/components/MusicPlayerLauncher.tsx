@@ -59,6 +59,7 @@ export default function MusicPlayerLauncher({
                                         width={40}
                                         height={40}
                                         aria-hidden
+                                        className="opacity-40"
                                     />
                                 </span>
                             </span>
