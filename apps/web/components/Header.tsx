@@ -5,9 +5,10 @@ import { getUser } from "@/lib/dal"
 export default async function Header() {
     const user = await getUser()
 
+    // 高さを固定しておくと、ロゴを大きくしてもヘッダーの見た目が変わらない
     return (
-        <header className="w-full bg-[#FFF2E0] px-2 py-2 md:px-6">
-            <div className="mx-auto flex w-full max-w-sm items-center justify-between gap-2 md:max-w-3xl">
+        <header className="h-10 w-full bg-[#FFF2E0] px-2 md:h-16 md:px-6">
+            <div className="mx-auto flex h-full w-full max-w-sm items-center justify-between gap-2 md:max-w-3xl">
             {/* 幅が足りないときはロゴ側を縮めて、リンクの折り返しを防ぐ */}
             <div className="min-w-0">
                 <Image
@@ -16,7 +17,7 @@ export default async function Header() {
                     width={520}
                     height={150}
                     priority
-                    className="h-6 md:h-12 w-auto max-w-full object-contain object-left"
+                    className="h-8 md:h-14 w-auto max-w-full object-contain object-left"
                 />
             </div>
 

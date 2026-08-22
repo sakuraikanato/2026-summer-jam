@@ -26,15 +26,23 @@ export default async function UserPage({ params }: PageProps<"/detail/[id]">) {
   if (!user) notFound();
 
   const tracks = await getTracksByUser(user.id);
+  const updated = `最終更新：${relativeDate(user.updatedAt)}`;
 
   return (
     <div className="flex flex-1 flex-col gap-3 w-full max-w-sm mx-auto px-4 pt-2 md:max-w-3xl md:gap-5 md:px-6 md:pt-8">
       <div className="flex items-center gap-3">
         {/* TODO: next/image に差し替え */}
         <div className="w-14 shrink-0 aspect-square rounded-full bg-gray-300 md:w-24" />
-        <h1 className="min-w-0 truncate text-lg font-bold">{user.name}</h1>
+
+        <div className="min-w-0 flex-1">
+          <h1 className="truncate text-lg font-bold">{user.name}</h1>
+          {/* スマホは横幅が足りないので名前の下に置く */}
+          <p className="truncate text-xs text-gray-600 md:hidden">{updated}</p>
+        </div>
+
         <FollowButton initialFollowing={user.isFollowing} />
-        <p className="shrink-0 text-xs text-gray-600">最終更新：{relativeDate(user.updatedAt)}</p>
+
+        <p className="hidden shrink-0 text-xs text-gray-600 md:block">{updated}</p>
       </div>
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">

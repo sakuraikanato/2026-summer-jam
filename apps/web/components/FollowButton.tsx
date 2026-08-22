@@ -19,7 +19,7 @@ export default function FollowButton({ initialFollowing }: FollowButtonProps) {
             type="button"
             onClick={toggle}
             aria-pressed={isFollowing}
-            className={`rounded-full border border-black px-3 py-1 text-xs ${
+            className={`shrink-0 whitespace-nowrap rounded-full border border-black px-3 py-1 text-xs ${
                 isFollowing ? "bg-[#D4D4D4]" : "bg-[#FFE9C9]"
             }`}
         >
