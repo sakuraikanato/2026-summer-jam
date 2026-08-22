@@ -15,7 +15,7 @@ export const cutMp3 = async ({
   outputPath,
   startTime,
   endTime,
-  fadeOutDuration = 0,
+  fadeOutDuration = 2,
 }: CutMp3Options): Promise<void> => {
   if (!Number.isFinite(startTime) || startTime < 0) {
     throw new Error("startTime must be a non-negative number");
